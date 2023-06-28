@@ -3,35 +3,42 @@ package main
 import (
 	"errors"
 	"fmt"
-	"sort"
+	"math"
 )
 
-func OrdenarSlice(slice []int) ([]int, error) {
-	if len(slice) == 0 {
-		return nil, errors.New("Slice vazio")
+func VerificarPrimo(numero int) (bool, error) {
+	if numero < 0 {
+		return false, errors.New("Número negativo")
 	}
 
-	sliceOrdenado := make([]int, len(slice))
-	copy(sliceOrdenado, slice)
-	sort.Ints(sliceOrdenado)
+	if numero < 2 {
+		return false, nil
+	}
 
-	return sliceOrdenado, nil
+	limite := int(math.Sqrt(float64(numero)))
+	for i := 2; i <= limite; i++ {
+		if numero%i == 0 {
+			return false, nil
+		}
+	}
+
+	return true, nil
 }
 
 func main() {
-	slice := []int{5, 2, 8, 1, 9, 3}
-	sliceOrdenado, err := OrdenarSlice(slice)
+	numero := 13
+	primo, err := VerificarPrimo(numero)
 	if err != nil {
 		fmt.Println("Erro:", err)
 	} else {
-		fmt.Println("Slice ordenado:", sliceOrdenado)
+		fmt.Printf("%d é primo: %t\n", numero, primo)
 	}
 
-	sliceVazio := []int{}
-	resultadoVazio, errVazio := OrdenarSlice(sliceVazio)
-	if errVazio != nil {
-		fmt.Println("Erro:", errVazio)
+	numeroNegativo := -7
+	primoNegativo, errNegativo := VerificarPrimo(numeroNegativo)
+	if errNegativo != nil {
+		fmt.Println("Erro:", errNegativo)
 	} else {
-		fmt.Println("Resultado:", resultadoVazio)
+		fmt.Printf("%d é primo: %t\n", numeroNegativo, primoNegativo)
 	}
 }
